@@ -1,8 +1,26 @@
 aid: qeenai
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source: []
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/qeenai.png
 name: Qeen.AI
-description: 'Qeen.AI is a company surfaced as a portfolio company of prosus-ventures and added to the
-  API Evangelist network as a stub for enrichment. Sector: ai. This profile is a lead awaiting the enrichment
-  pipeline.'
+description: 'Qeen.AI is an AI-powered digital marketing ecosystem for e-commerce brands
+  across the GCC and wider MENA region. Founded in 2023 and headquartered in the UAE,
+  the company pairs machine learning with human marketing expertise to run strategy,
+  paid-media execution, creative production, and continuous optimization on a performance
+  basis (no retainers, commission starting at 5% of generated revenue). Its founding
+  team includes former Google and DeepMind researchers, and it has raised roughly $12M,
+  including backing from Prosus Ventures. Qeen.AI operates a customer application at
+  app.qeen.ai but does not currently publish a public developer portal, API documentation,
+  SDKs, or an OpenAPI surface.'
 url: https://raw.githubusercontent.com/api-evangelist/qeenai/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -12,10 +30,14 @@ x-tier: stub
 x-tier-reason: portfolio-lead
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-20'
 tags:
 - Company
 - Ai
+- Marketing
+- Ecommerce
+- Advertising
+- MENA
 apis: []
 maintainers:
 - FN: Kin Lane
@@ -25,3 +47,18 @@ maintainers:
 common:
 - type: Website
   url: https://qeen.ai
+- type: Blog
+  url: https://blog.qeen.ai
+- type: Login
+  url: https://app.qeen.ai/en
+- type: PrivacyPolicy
+  url: https://qeen.ai/en/privacy-policy
+- type: TermsOfService
+  url: https://qeen.ai/en/terms-of-service
+- type: DomainSecurity
+  url: security/qeenai-domain-security.yml
+x-enrichment:
+  date: '2026-07-20'
+  status: minimal
+  artifacts_added: 1
+  pass: local-v1
