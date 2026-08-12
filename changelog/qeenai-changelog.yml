@@ -1,0 +1,89 @@
+generated: '2026-08-12'
+method: searched
+source: >-
+  https://github.com/fodoole/qeen-mobile-sdk-ios/tags and its commit history,
+  https://github.com/fodoole/qeen-maven commit history
+note: >-
+  Qeen publishes no prose changelog page and no release notes on its website. It does publish a
+  dated, versioned, descriptively-messaged release history in the two public SDK repositories, and
+  that is the artifact captured here. Entries are the provider's own commit/tag messages, verbatim
+  where quoted — nothing is summarized into a claim the provider did not make.
+
+scheme: git-tags
+release_notes_format: commit-message
+current_version: 1.5.0
+current_version_date: '2026-08-12'
+window: '2026-07-23 to 2026-08-12 (complete history — the SDKs are new)'
+
+entries:
+  - version: 1.5.0
+    date: '2026-08-12'
+    surfaces: [ios, android]
+    message: 'Add stable qeen_device_id super property (1.5.0)'
+    breaking: false
+    additions: ['stable qeen_device_id super property attached to every event']
+
+  - version: 1.4.0
+    date: '2026-08-04'
+    surfaces: [ios, android]
+    message: 'Release 1.4.0 — event-name revamp + 6 new events'
+    breaking: true
+    breaking_detail: 'wire event names were revised'
+    additions: ['six new typed events']
+
+  - version: 1.3.0
+    date: '2026-08-03'
+    surfaces: [ios, android]
+    message: 'QeenSDK iOS 1.3.0 — typed standard events; module renamed to Qeen'
+    breaking: true
+    breaking_detail: >-
+      Swift module renamed QeenSDK -> Qeen; consumers change `import QeenSDK` to `import Qeen`.
+      The namespace type QeenSDK is unchanged, so call sites do not move. The README explains the
+      rename was forced by library evolution: a module and a type both named QeenSDK make any
+      signature referencing an SDK-defined type unresolvable on the client.
+    additions: ['typed standard events (productViewed, addToCart, cartUpdated, checkoutStarted, orderCompleted, orderRefunded, signedIn, signedUp)', 'Money / LineItem / Currency value types']
+
+  - version: 1.2.0
+    date: '2026-07-28'
+    surfaces: [ios, android]
+    message: 'QeenSDK iOS 1.2.0 — attribution moves server-side; deep-link event carries all query params'
+    breaking: false
+    additions: ['every query parameter on an inbound deep link is captured on Deep Link Opened', 'attribution derived server-side so new marketing params need no SDK release']
+
+  - version: 1.1.1
+    date: '2026-07-28'
+    surfaces: [ios]
+    message: 'QeenSDK iOS 1.0.1 — add App Store privacy manifest (NSPrivacyTracking=true)'
+    breaking: false
+    additions: ['PrivacyInfo.xcprivacy App Store privacy manifest']
+    note: >-
+      The commit message says 1.0.1 while the tag is 1.1.1 — the provider's own release record is
+      internally inconsistent here.
+
+  - version: 1.1.0
+    date: '2026-07-27'
+    surfaces: [ios]
+    message: 'QeenSDK iOS 1.1.0 — TikTok click id + capture all deep-link params'
+    breaking: false
+    additions: ['ttclid (TikTok) click id recognized', 'all deep-link params captured']
+
+  - version: 1.0.0
+    date: '2026-07-26'
+    surfaces: [ios, android]
+    message: 'QeenSDK iOS 1.0.0 — configurable engine options passthrough'
+    breaking: false
+    additions: ['options: [String: Any] passthrough on configure()']
+
+  - version: 0.1.0
+    date: '2026-07-23'
+    surfaces: [ios, android]
+    message: 'QeenSDK 0.1.0 — initial binary release'
+    breaking: false
+    additions: ['initial binary XCFramework / AAR release']
+
+summary:
+  entries: 8
+  breaking_releases: 2
+  dated: true
+  prose_changelog_page: false
+  rss: false

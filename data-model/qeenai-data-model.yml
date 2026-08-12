@@ -1,0 +1,134 @@
+generated: '2026-08-12'
+method: derived
+source: >-
+  packages/qeenai-ios-sdk-interface.swiftinterface (the library-evolution .swiftinterface shipped
+  inside Qeen.xcframework at fodoole/qeen-mobile-sdk-ios@1.5.0) and
+  https://cdn.qeen.ai/sdk/qeen.js
+note: >-
+  Qeen publishes no OpenAPI and no JSON Schema. The entity graph below is derived from the one
+  machine-readable public contract the company does ship: the Swift module interface embedded in
+  its binary iOS SDK, which declares the full public type surface. Cross-checked against the
+  browser SDK's event payload shape. No field is invented — every type, property and case appears
+  verbatim in that interface.
+
+entities:
+  - name: QeenEvent
+    kind: enum
+    description: The typed commerce event vocabulary the SDK emits.
+    cases:
+      - {case: productViewed, fields: [item]}
+      - {case: addToCart, fields: [cartId, item, value, itemCount]}
+      - {case: cartUpdated, fields: [cartId, value, itemCount]}
+      - {case: couponApplied, fields: [cartId, code]}
+      - {case: couponRemoved, fields: [cartId, code]}
+      - {case: cartCleared, fields: [cartId]}
+      - {case: checkoutStarted, fields: [cartId, value, itemCount, items, email, phone]}
+      - {case: paymentMethodSet, fields: [cartId, method]}
+      - {case: shippingDetailsSet, fields: [cartId, method]}
+      - {case: orderCompleted, fields: [orderId, cartId, value, items]}
+      - {case: orderPlaced, fields: [orderId, cartId, value, items]}
+      - {case: orderRefunded, fields: [orderId, value, items, refundId, cartId, reason]}
+      - {case: signedIn, fields: [method, email, phone]}
+      - {case: signedUp, fields: [method, email, phone]}
+      - {case: custom, fields: [eventName, properties]}
+    members:
+      - {name: name, type: String, description: The wire event name}
+      - {name: reservedEventNames, type: Set<String>, description: Names the custom case may not shadow}
+
+  - name: LineItem
+    kind: struct
+    description: A single product line on a cart, checkout or order event.
+    fields:
+      - {name: productId, type: String, required: true}
+      - {name: quantity, type: Int, required: true, default: 1}
+      - {name: unitPrice, type: Money, required: false}
+      - {name: name, type: String, required: false}
+      - {name: category, type: String, required: false}
+      - {name: variantId, type: String, required: false}
+
+  - name: Money
+    kind: struct
+    description: A monetary amount that always carries its currency.
+    fields:
+      - {name: amount, type: Double, required: true}
+      - {name: currency, type: Currency, required: true}
+    constructors: ['Money(amount:currency:)', 'Money.of(_:_:)', 'Money.usd(_:)', 'Money.jod(_:)']
+
+  - name: Currency
+    kind: struct
+    description: ISO-4217 currency code with named constants.
+    fields:
+      - {name: code, type: String, required: true}
+    constants: [usd, eur, gbp, jod, sar, aed, egp, kwd, qar, bhd, omr, TRY, cad, aud, jpy, inr]
+    note: >-
+      The named set is a direct read on the market — six GCC currencies (sar, aed, kwd, qar, bhd,
+      omr) plus jod and egp, ahead of cad/aud/jpy/inr.
+
+  - name: Identity
+    kind: implicit
+    description: >-
+      Not a declared struct — the identity surface implied by QeenSDK.identify(userId:traits:),
+      reset() and the qeen_device_id super property added in 1.5.0.
+    fields:
+      - {name: userId, type: String, required: true}
+      - {name: traits, type: 'Dictionary<String, Any>', required: false}
+      - {name: qeen_device_id, type: String, note: 'stable super property, added 1.5.0'}
+
+  - name: PageSession
+    kind: struct
+    surface: web
+    description: Browser session state maintained by the web SDK (window.qeen.state / .config).
+    source: https://cdn.qeen.ai/sdk/qeen.js
+    fields:
+      - {name: ts, type: epoch-millis}
+      - {name: pid, type: String, description: page session id}
+      - {name: u, type: String, description: page URL}
+      - {name: ua, type: String, description: user agent}
+      - {name: r, type: String, description: referrer}
+      - {name: p, type: String, description: projectId}
+      - {name: wid, type: String, description: websiteId}
+      - {name: csrvid, type: String, description: contentServingId}
+      - {name: cid, type: String, description: contentId}
+      - {name: cs, type: String, description: contentStatus}
+      - {name: prid, type: String, description: productId}
+      - {name: uid, type: String, description: qeen device id}
+      - {name: npdp, type: Boolean, description: 'true when the page is NOT a product detail page'}
+      - {name: t, type: String, description: 'event type: PAGE_VIEW, CLICK, SCROLL, IDLE, CHECKOUT, CONTENT_SERVED, PAGE_EXIT, TAB_SWITCH, INIT, RESET'}
+      - {name: v, type: Number, description: event value}
+      - {name: l, type: String, description: event label}
+      - {name: edp, type: String, description: element DOM path / selector}
+
+relationships:
+  - {from: QeenEvent, to: LineItem, kind: has_many, via: items}
+  - {from: QeenEvent, to: LineItem, kind: has_one, via: item}
+  - {from: QeenEvent, to: Money, kind: has_one, via: value}
+  - {from: LineItem, to: Money, kind: has_one, via: unitPrice}
+  - {from: Money, to: Currency, kind: has_one, via: currency}
+  - {from: QeenEvent, to: Cart, kind: belongs_to, via: cartId, note: 'Cart is referenced by id only; no Cart type is exposed'}
+  - {from: QeenEvent, to: Order, kind: belongs_to, via: orderId, note: 'Order is referenced by id only; no Order type is exposed'}
+  - {from: QeenEvent, to: Identity, kind: belongs_to, via: userId}
+  - {from: PageSession, to: Website, kind: belongs_to, via: wid, note: 'server-assigned; no Website type is exposed to the client'}
+  - {from: PageSession, to: Content, kind: belongs_to, via: 'cid / csrvid', note: 'server-assigned content and content-serving ids'}
+
+id_references:
+  - {field: productId, entity: Product, exposed_type: false}
+  - {field: variantId, entity: ProductVariant, exposed_type: false}
+  - {field: cartId, entity: Cart, exposed_type: false}
+  - {field: orderId, entity: Order, exposed_type: false}
+  - {field: refundId, entity: Refund, exposed_type: false}
+  - {field: userId, entity: User, exposed_type: false}
+  - {field: projectId, entity: Project, exposed_type: false}
+  - {field: websiteId, entity: Website, exposed_type: false}
+
+pii_fields:
+  - {field: email, appears_on: [checkoutStarted, signedIn, signedUp], note: 'accepted in cleartext by the client SDK'}
+  - {field: phone, appears_on: [checkoutStarted, signedIn, signedUp]}
+  - {field: traits, appears_on: [identify], note: free-form dictionary
+      }
+
+summary:
+  entities: 6
+  relationships: 10
+  id_reference_fields: 8
+  spec_backed: false
+  contract_source: swift-module-interface

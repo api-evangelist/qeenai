@@ -1,0 +1,95 @@
+generated: '2026-08-12'
+method: searched
+source: https://apps.shopify.com/qeen-ai
+additional_sources:
+  - https://qeen.ai/en
+note: >-
+  Qeen sells through two different commercial models and publishes prices for only one of them.
+  The self-serve product (the Shopify content-optimization app) has public per-tier pricing; the
+  company's own website sells a services engagement priced as a revenue share with no published
+  rate card beyond a floor. Both are captured, and the currency is USD in both cases. There is no
+  API pricing and no developer plan — the SDKs are entitlements of a paid account, with the host
+  and API key provisioned by email.
+
+plan_count: 4
+
+plans:
+  - name: Starter
+    channel: Shopify App Store
+    price: 19
+    currency: USD
+    billing_period: month
+    annual_price: 189
+    annual_currency: USD
+    annual_note: '"$189/year and save 17%"'
+    quota:
+      active_products: 50
+      optimized_languages: 1
+    includes: [AI-generated titles and descriptions, SEO boost, automated testing]
+    overage: not published
+
+  - name: Growth
+    channel: Shopify App Store
+    price: 39
+    currency: USD
+    billing_period: month
+    annual_price: 388
+    annual_currency: USD
+    annual_note: '"$388/year and save 17%"'
+    quota:
+      active_products: 250
+      optimized_languages: 2
+    includes: [AI-generated titles and descriptions, SEO boost, automated testing]
+    overage: not published
+
+  - name: Expansion
+    channel: Shopify App Store
+    price: 89
+    currency: USD
+    billing_period: month
+    annual_price: 890
+    annual_currency: USD
+    annual_note: '"$890/year and save 89%" — as published; the stated 89% saving does not match the arithmetic (890 vs 1068/yr is ~17%), matching the other two tiers'
+    quota:
+      active_products: 1000
+      optimized_languages: 2
+    includes: [AI-generated titles and descriptions, SEO boost, automated testing]
+    overage: not published
+
+  - name: Growth System
+    channel: Direct (qeen.ai)
+    pricing_model: revenue-share
+    price: null
+    currency: USD
+    billing_period: null
+    terms: '"Commission starts at 5% of the revenue we generate"'
+    minimum_commitment: '"Minimum media spend required +$4000 (paid by you directly to platforms)"'
+    includes:
+      - Full marketing system (qeen OS)
+      - Strategy and direction
+      - Paid media execution
+      - Creative production
+      - Continuous optimization
+      - Tracking and attribution
+      - Human oversight
+    note: >-
+      No retainer. Entry is via a "Get a free audit" form rather than self-serve signup, so the
+      effective rate above the 5% floor is negotiated and unpublished.
+
+trial:
+  available: true
+  length_days: 7
+  scope: Shopify App Store plans only
+  source: https://apps.shopify.com/qeen-ai
+
+api_pricing:
+  published: false
+  note: >-
+    No metered API pricing, no request-based tier and no developer plan. SDK access is an
+    entitlement of a paid account — the host and API key are issued privately via tech@qeen.ai.
+
+pricing_page:
+  own_site: null
+  note: >-
+    qeen.ai has no /pricing page — https://qeen.ai/en/pricing returns 404 and https://qeen.ai/pricing
+    serves the homepage. The commission terms appear only in a homepage section.

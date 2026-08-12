@@ -1,0 +1,78 @@
+generated: '2026-08-12'
+method: probed
+source: live GET probes of every Qeen host on 2026-08-12
+result: no-hit
+note: >-
+  Every /.well-known/ path 404s on every host Qeen controls. Two hosts — app.qeen.ai (a Nuxt
+  single-page app) and blog.qeen.ai (Ghost) — answer HTTP 200 with the same ~556KB / ~16KB HTML
+  shell for EVERY path including /.well-known/agent-card.json, /llms.txt and /openapi.json. Those
+  are SPA catch-alls, not documents, and are recorded as misses. No WellKnown pointer is emitted
+  and no SecurityTxt pointer is emitted, because Qeen serves no such document anywhere.
+
+hosts:
+  - host: https://qeen.ai
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /.well-known/openid-configuration, status: 404}
+      - {path: /.well-known/oauth-authorization-server, status: 404}
+      - {path: /.well-known/api-catalog, status: 404}
+      - {path: /.well-known/ai-plugin.json, status: 404}
+      - {path: /.well-known/agent-card.json, status: 404}
+      - {path: /.well-known/agent.json, status: 404}
+      - {path: /llms.txt, status: 404}
+      - {path: /robots.txt, status: 200, content_type: text/plain, note: 'User-Agent: * / Disallow: (empty) — nothing disallowed; not a discovery document'}
+
+  - host: https://api.qeen.ai
+    note: >-
+      Host resolves and is live behind Google Frontend, but returns a bare text/plain
+      "404 page not found" for every path including the site root — a Go service with no route
+      mounted at any probed path.
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /.well-known/agent-card.json, status: 404}
+      - {path: /.well-known/agent.json, status: 404}
+
+  - host: https://users.qeen.ai
+    note: >-
+      Live Django REST Framework API (see authentication/). Returns a Flask/Werkzeug-style HTML
+      404 page for unrouted paths.
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /.well-known/openid-configuration, status: 404}
+      - {path: /.well-known/oauth-authorization-server, status: 404}
+      - {path: /.well-known/agent-card.json, status: 404}
+      - {path: /.well-known/agent.json, status: 404}
+
+  - host: https://app.qeen.ai
+    note: >-
+      SPA catch-all — HTTP 200 with a 555KB text/html Nuxt shell on every path probed. Treated as
+      a miss on all of them; a 200 that returns HTML is not a document.
+    documents:
+      - {path: /.well-known/security.txt, status: 200, content_type: text/html, hit: false, reason: spa-shell}
+      - {path: /.well-known/openid-configuration, status: 200, content_type: text/html, hit: false, reason: spa-shell}
+      - {path: /.well-known/oauth-authorization-server, status: 200, content_type: text/html, hit: false, reason: spa-shell}
+      - {path: /.well-known/api-catalog, status: 200, content_type: text/html, hit: false, reason: spa-shell}
+      - {path: /.well-known/ai-plugin.json, status: 200, content_type: text/html, hit: false, reason: spa-shell}
+      - {path: /.well-known/agent-card.json, status: 200, content_type: text/html, hit: false, reason: spa-shell}
+      - {path: /.well-known/agent.json, status: 200, content_type: text/html, hit: false, reason: spa-shell}
+      - {path: /llms.txt, status: 200, content_type: text/html, hit: false, reason: spa-shell}
+
+  - host: https://blog.qeen.ai
+    note: Ghost blog; catch-all HTML on /llms.txt.
+    documents:
+      - {path: /llms.txt, status: 200, content_type: text/html, hit: false, reason: cms-catch-all}
+      - {path: /robots.txt, status: 200, content_type: text/plain, note: real robots.txt, disallows /ghost/ and /email/}
+
+  - host: https://fodoole-web-analytics-qfan6cresq-ew.a.run.app
+    note: The data-plane host the published web SDK calls.
+    documents:
+      - {path: /.well-known/agent-card.json, status: 404}
+      - {path: /openapi.json, status: 404}
+
+summary:
+  documents_found: 0
+  security_txt: false
+  agent_card: false
+  openid_configuration: false
+  api_catalog: false
+  ai_plugin: false

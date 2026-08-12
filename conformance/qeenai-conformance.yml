@@ -1,0 +1,90 @@
+generated: '2026-08-12'
+method: derived
+source: >-
+  packages/qeenai-ios-sdk-interface.swiftinterface, https://cdn.qeen.ai/sdk/qeen.js,
+  https://github.com/fodoole/qeen-mobile-sdk-ios, live probes of qeen.ai / users.qeen.ai on
+  2026-08-12, and https://qeen.ai/en/privacy-policy
+note: >-
+  Qeen publishes no compliance program, no certifications and no trust center — the security
+  program probe returned vdp=none, trust=none. Every entry below is derived from what its own
+  published artifacts demonstrably do or do not implement. NO Compliance pointer is emitted,
+  because there is no published compliance posture to point at.
+
+standards:
+  - id: oauth2
+    conforms: false
+    evidence: 'No oauth2 surface. /.well-known/oauth-authorization-server 404s on qeen.ai, api.qeen.ai and users.qeen.ai.'
+  - id: oidc
+    conforms: false
+    evidence: '/.well-known/openid-configuration 404s on every host.'
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: 'Errors use DRF {"detail": ...}, a bare {"error": ...}, and text/plain — never application/problem+json. Three different envelopes across two hosts.'
+  - id: rfc9116-security-txt
+    conforms: false
+    evidence: '/.well-known/security.txt 404s on every host Qeen controls.'
+  - id: rfc8615-well-known
+    conforms: false
+    evidence: 'No document is served at any /.well-known/ path. See well-known/qeenai-well-known.yml.'
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: 'No Sunset or Deprecation header observed; no deprecation policy published.'
+  - id: openapi
+    conforms: false
+    evidence: 'No OpenAPI at any host root, docs host or API host. See x-coverage in apis.yml.'
+  - id: asyncapi
+    conforms: false
+    evidence: 'No event specification published. The SDK emits events to Qeen; Qeen publishes no webhook or streaming surface back to customers.'
+  - id: mcp
+    conforms: false
+    evidence: 'No MCP server. mcp.qeen.ai does not resolve; no tools/list endpoint found.'
+  - id: a2a
+    conforms: false
+    evidence: '/.well-known/agent-card.json and /.well-known/agent.json 404 on every real host; app.qeen.ai returns an SPA HTML shell, which is not a card.'
+  - id: llms-txt
+    conforms: false
+    evidence: '/llms.txt 404s on qeen.ai; app.qeen.ai and blog.qeen.ai return catch-all HTML.'
+  - id: semver
+    conforms: true
+    evidence: 'Both mobile SDKs publish semver tags 0.1.0 through 1.5.0 with a maven-metadata.xml declaring <release>1.5.0</release>.'
+  - id: iso4217-currency
+    conforms: true
+    evidence: 'QeenSDK.Currency wraps an ISO 4217 code and ships 16 named constants; Money always pairs an amount with a currency, so a currency-less price is not expressible.'
+  - id: apple-privacy-manifest
+    conforms: true
+    evidence: 'PrivacyInfo.xcprivacy ships at the package root and inside Qeen.framework; NSPrivacyTracking=true added in 1.0.1 (2026-07-28).'
+  - id: swiftpm
+    conforms: true
+    evidence: 'Package.swift declares swift-tools-version 5.9, a binaryTarget and a public product; resolvable with no credentials.'
+  - id: maven-repository-layout
+    conforms: true
+    evidence: 'ai/qeen/qeensdk/ publishes pom, aar, sources.jar, .module and maven-metadata.xml with md5/sha1/sha256/sha512 checksums for every artifact.'
+  - id: library-evolution
+    conforms: true
+    evidence: 'The XCFramework ships a library-evolution .swiftinterface (-enable-library-evolution), so the binary has a stable ABI across compiler versions.'
+  - id: dmarc
+    conforms: true
+    evidence: 'qeen.ai publishes SPF and DMARC with policy=reject. See security/qeenai-domain-security.yml.'
+  - id: dnssec
+    conforms: false
+    evidence: 'No DNSSEC on qeen.ai.'
+  - id: caa
+    conforms: false
+    evidence: 'No CAA records on qeen.ai.'
+  - id: hsts
+    conforms: false
+    evidence: 'qeen.ai serves no Strict-Transport-Security header.'
+  - id: tls13
+    conforms: true
+    evidence: 'qeen.ai negotiates TLSv1.3.'
+
+certifications: []
+compliance_program_published: false
+trust_center: false
+vulnerability_disclosure: false
+
+summary:
+  standards_evaluated: 22
+  conforming: 8
+  non_conforming: 14
+  certifications: 0

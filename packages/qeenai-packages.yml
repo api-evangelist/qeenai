@@ -1,0 +1,125 @@
+generated: '2026-08-12'
+method: searched
+source: >-
+  https://github.com/fodoole/qeen-mobile-sdk-ios (SwiftPM),
+  https://github.com/fodoole/qeen-maven (Maven), https://cdn.qeen.ai/ (GCS bucket "qeen-public")
+note: >-
+  Qeen publishes no package on npm, PyPI, RubyGems, crates.io, Packagist, NuGet or Maven Central.
+  Its first-party client libraries are distributed from two places instead: two self-hosted
+  repositories under the "fodoole" GitHub organization (Fodoole is the company's earlier name — the
+  loader served from Qeen's own cdn.qeen.ai sets window.fodooleMutex and localStorage "fodoole_uid",
+  and the fodoole org publishes artifacts under the ai.qeen group id with tech@qeen.ai as contact),
+  and a public Google Cloud Storage bucket at cdn.qeen.ai for the browser SDK.
+
+packages:
+  - language: swift
+    platform: ios
+    registry: swiftpm
+    name: Qeen
+    product: Qeen
+    namespace: QeenSDK
+    url: https://github.com/fodoole/qeen-mobile-sdk-ios
+    install: '.package(url: "https://github.com/fodoole/qeen-mobile-sdk-ios.git", from: "1.5.0")'
+    official: true
+    version: 1.5.0
+    published: '2026-08-12'
+    version_source: git tag 1.5.0 on fodoole/qeen-mobile-sdk-ios
+    distribution: binary XCFramework committed to the repo and referenced by a path-based binaryTarget
+    requirements: iOS 15+, Xcode 16+
+    interface: packages/qeenai-ios-sdk-interface.swiftinterface
+    note: >-
+      Not on any package index — SwiftPM resolves it straight from the public GitHub repo, so no
+      account is needed. Eight tagged releases 0.1.0 (2026-07-23) through 1.5.0 (2026-08-12);
+      actively shipping. The analytics engine is PostHog, compiled into the framework and hidden
+      (no importable PostHog module, no transitive SwiftPM dependency).
+
+  - language: kotlin
+    platform: android
+    registry: maven
+    name: ai.qeen:qeensdk
+    group_id: ai.qeen
+    artifact_id: qeensdk
+    url: https://github.com/fodoole/qeen-maven
+    repository: https://raw.githubusercontent.com/fodoole/qeen-maven/main
+    install: 'implementation("ai.qeen:qeensdk:1.5.0")'
+    official: true
+    version: 1.5.0
+    published: '2026-08-12'
+    version_source: >-
+      https://raw.githubusercontent.com/fodoole/qeen-maven/main/ai/qeen/qeensdk/maven-metadata.xml
+      (<release>1.5.0</release>, lastUpdated 20260812131316)
+    artifacts: [aar, sources.jar, pom, module]
+    checksums: [md5, sha1, sha256, sha512]
+    note: >-
+      Self-hosted Maven repository served from raw.githubusercontent.com, NOT Maven Central — a
+      consumer must add the custom repository URL to settings.gradle.kts. Six published versions:
+      0.1.0, 1.0.0, 1.2.0, 1.3.0, 1.4.0, 1.5.0. The repo README still shows 0.1.0 in its install
+      snippet while maven-metadata.xml resolves 1.5.0 as the release.
+
+  - language: javascript
+    platform: web
+    registry: cdn
+    name: qeen.js
+    url: https://cdn.qeen.ai/sdk/qeen.js
+    install: '<script src="https://cdn.qeen.ai/sdk/qeen.js"></script>'
+    official: true
+    version: '1.0'
+    published: '2025-10-29'
+    version_source: >-
+      qeen.sdkVersion = "1.0" in the shipped bundle; date from the object's Last-Modified header
+      (Wed, 29 Oct 2025 07:52:54 GMT)
+    global: window.qeen
+    size_bytes: 8105
+    note: >-
+      CDN-distributed, no registry metadata endpoint exists. Two paths serve the identical object
+      (same ETag 65139c7a0e95569fc465f19dcc5c4894): /sdk/qeen.js and /sdk/v1.0/qeen.js. Neither is
+      pinned to a patch version — "v1.0" is a major-line directory, so a consumer embedding either
+      URL cannot tell which build they are getting and will silently take any future 1.0.x change.
+      Cache-Control is public, max-age=3600.
+
+  - language: javascript
+    platform: web
+    registry: cdn
+    name: qeenSearch.js
+    url: https://cdn.qeen.ai/sdk/v1.0/qeenSearch.js
+    install: '<script src="https://cdn.qeen.ai/sdk/v1.0/qeenSearch.js"></script>'
+    official: true
+    version: null
+    published: '2025-02-05'
+    version_source: null
+    global: window.qeenSearch
+    size_bytes: 28486
+    note: >-
+      Checked, nothing to record — the bundle declares no version string and the CDN path pins only
+      the v1.0 major line, so there is no version a consumer can assert. Date is the object's
+      Last-Modified. Ships the embedded AI search widget (see components/).
+
+  - language: javascript
+    platform: web
+    registry: cdn
+    name: loader/main.js
+    url: https://cdn.qeen.ai/loader/main.js
+    install: '<script src="https://cdn.qeen.ai/loader/main.js"></script>'
+    official: true
+    version: null
+    published: '2025-01-13'
+    version_source: null
+    size_bytes: 940
+    note: >-
+      Checked, nothing to record — unversioned tag-manager-style bootstrap. It hashes the page URL
+      and a persisted device id and injects the content-replacement script from
+      fodoole-web-analytics-qfan6cresq-ew.a.run.app/qeen-script/{hash}. Three per-merchant variants
+      exist alongside it (loader/custom/saco.js, dubaistore.js, thwifty.js), one of which reads a
+      SAP Spartacus locale key — evidence of bespoke per-customer builds rather than a single
+      configurable snippet.
+
+registries_checked:
+  - {registry: npm, query: 'qeen / qeen-ai / qeenai', result: no first-party package}
+  - {registry: pypi, query: 'qeen / qeen-ai / qeenai', result: 404}
+  - {registry: maven-central, query: 'ai.qeen', result: not published to Central; self-hosted only}
+  - {registry: rubygems, result: not checked — no Ruby surface}
+  - {registry: crates.io, result: not checked — no Rust surface}
+  - {registry: nuget, result: not checked — no .NET surface}
+  - {registry: pkg.go.dev, result: not checked — no Go surface}
+
+official_sdk_count: 3

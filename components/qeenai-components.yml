@@ -1,0 +1,92 @@
+generated: '2026-08-12'
+method: searched
+source: >-
+  https://cdn.qeen.ai/ (public GCS bucket "qeen-public"), https://cdn.qeen.ai/loader/main.js,
+  https://cdn.qeen.ai/sdk/qeen.js, https://cdn.qeen.ai/sdk/v1.0/qeenSearch.js
+note: >-
+  Qeen's browser surface is a set of drop-in client-side components delivered by script tag, not a
+  server-side SDK — this is the "simple JavaScript snippet" its marketing describes. All four
+  objects below were fetched anonymously from Qeen's own CDN, which serves a publicly listable
+  Google Cloud Storage bucket.
+
+families:
+  - family: Content optimization
+    description: >-
+      Rewrites and A/B-tests on-page product content (titles, descriptions, meta descriptions) in
+      place, and measures the outcome.
+    components:
+      - name: qeen loader snippet
+        url: https://cdn.qeen.ai/loader/main.js
+        loader: '<script src="https://cdn.qeen.ai/loader/main.js"></script>'
+        type: bootstrap
+        size_bytes: 940
+        last_modified: '2025-01-13'
+        behavior: >-
+          Guards against double-injection via window.qeenMutex, persists a device id in
+          localStorage ("fodoole_uid"), collects pageUrl, referrerUrl, locale, langCode and
+          IANA timezone, then injects a script element with id "qeen-content-replacement" from
+          the content service.
+      - name: qeen SDK
+        url: https://cdn.qeen.ai/sdk/qeen.js
+        alt_url: https://cdn.qeen.ai/sdk/v1.0/qeen.js
+        type: web-sdk
+        global: window.qeen
+        version: '1.0'
+        size_bytes: 8105
+        last_modified: '2025-10-29'
+        public_api:
+          - {name: config, kind: property, description: Project/website/content-serving configuration for the page}
+          - {name: state, kind: property, description: Session state (session id, device id, timers, served flags)}
+          - {name: sdkVersion, kind: property, value: '1.0'}
+          - {name: fetchQeenContent, kind: method, description: Fetch optimized content for the current page}
+          - {name: initPageSession, kind: method, description: Start a page session and begin event collection}
+          - {name: bindClickEvents, kind: method, description: Bind labelled CLICK events to CSS selectors}
+          - {name: bindScrollEvents, kind: method, description: Bind labelled SCROLL events via IntersectionObserver at a 0.5 threshold}
+          - {name: sendCheckoutEvent, kind: method, signature: 'sendCheckoutEvent(currency, value)', description: Emit a CHECKOUT event; rejected on product detail pages}
+          - {name: setContentServed, kind: method}
+          - {name: resetContentServed, kind: method}
+          - {name: sendContentServedEvent, kind: method}
+          - {name: randInt, kind: method}
+        error_types: [InvalidParameterError, AnalyticsEndpointError, ResponseNotOkError, URLContainsNoQeenError]
+        note: >-
+          Events are delivered with navigator.sendBeacon to an analytics endpoint supplied by the
+          server-side client config, not a URL hardcoded in the bundle.
+
+  - family: Merchant-specific builds
+    description: >-
+      Per-customer variants of the loader, published alongside the generic one.
+    components:
+      - {name: saco.js, url: 'https://cdn.qeen.ai/loader/custom/saco.js', size_bytes: 1105, last_modified: '2025-01-13', note: 'Reads the SAP Spartacus language key from localStorage to set document lang before boot'}
+      - {name: dubaistore.js, url: 'https://cdn.qeen.ai/loader/custom/dubaistore.js', size_bytes: 1041, last_modified: '2025-01-13'}
+      - {name: thwifty.js, url: 'https://cdn.qeen.ai/loader/custom/thwifty.js', size_bytes: 1036, last_modified: '2025-01-13'}
+
+  - family: AI search
+    description: Embedded storefront search experience.
+    components:
+      - name: qeenSearch
+        url: https://cdn.qeen.ai/sdk/v1.0/qeenSearch.js
+        type: web-component
+        global: window.qeenSearch
+        size_bytes: 28486
+        last_modified: '2025-02-05'
+        endpoints:
+          - https://fodoole-web-analytics-qfan6cresq-ew.a.run.app/search-results
+          - https://fodoole-web-analytics-qfan6cresq-ew.a.run.app/search-logging
+        assets:
+          - https://cdn.qeen.ai/static/search/MagicSearch.png
+          - https://cdn.qeen.ai/static/search/Spinner.gif
+          - https://cdn.qeen.ai/static/search/searching.png
+          - https://cdn.qeen.ai/static/search/stars.png
+        note: >-
+          Ships its own inline SVG UI and image assets. /search-results answers anonymously and
+          returns {"error":"Empty search query provided"} on a bare GET.
+
+preview_mode:
+  description: >-
+    The web SDK ships a documented-in-code preview channel used by Qeen's own dashboard to render
+    proposed content into a live merchant page.
+  flags:
+    - {flag: '#no-qeen', effect: 'Disables the SDK on the page and opens a postMessage listener accepting {action:"renderDemoContent", domPath, content} and {action:"scrollToTarget", domPath}'}
+    - {flag: '#qeen-dev', effect: 'Logs every interaction event to the console before it is beaconed'}
+
+component_count: 7

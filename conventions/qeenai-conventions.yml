@@ -1,0 +1,140 @@
+generated: '2026-08-12'
+method: searched
+source: >-
+  https://github.com/fodoole/qeen-mobile-sdk-ios (README + shipped .swiftinterface),
+  https://github.com/fodoole/qeen-maven, https://cdn.qeen.ai/sdk/qeen.js,
+  https://cdn.qeen.ai/loader/main.js, and live probes of https://users.qeen.ai/api/v1/*
+note: >-
+  Qeen publishes no HTTP API reference, so these conventions are the ones its published client
+  libraries actually implement, plus what a live unauthenticated request to its platform API
+  reveals. Where a convention is simply absent, that is recorded as absent rather than guessed.
+
+authentication:
+  style: 'API key + customer-provisioned host, supplied at SDK configuration time'
+  self_serve: false
+  detail: authentication/qeenai-authentication.yml
+
+idempotency:
+  supported: false
+  header: null
+  note: >-
+    No idempotency key, no request-deduplication contract, and no retry-safety statement in any
+    published SDK, README or observed response. The event pipeline is fire-and-forget: the browser
+    SDK ships events with navigator.sendBeacon (no response is read, so no retry is possible) and
+    the mobile SDK exposes only flush(), which drains a queue without any client-visible
+    idempotency token. Recorded as absent — NO Idempotency pointer is emitted.
+
+pagination:
+  supported: unknown
+  note: >-
+    The platform API at users.qeen.ai has list endpoints (/api/v1/core/websites,
+    /api/v1/content/websites) but every one returns 401 unauthenticated, so no pagination style,
+    parameter or envelope could be observed. Not documented publicly.
+
+versioning:
+  api:
+    scheme: uri-path
+    current: v1
+    example: https://users.qeen.ai/api/v1/
+  web_sdk:
+    scheme: major-line CDN directory
+    current: '1.0'
+    exposed_as: window.qeen.sdkVersion
+    note: 'Both /sdk/qeen.js and /sdk/v1.0/qeen.js serve the same object; neither is patch-pinned.'
+  mobile_sdk:
+    scheme: semver, git tags
+    current: 1.5.0
+    note: 'Same version line for iOS and Android; both released 2026-08-12.'
+  breaking_change_practice: >-
+    Communicated in the SDK README rather than a policy page. The 1.3.0 module rename
+    (import QeenSDK -> import Qeen) is documented inline with the reason and a one-line migration,
+    and the README explains WHY the module and namespace names must differ (a library-evolution
+    .swiftinterface cannot resolve SDK-defined types if module and type share a name). That is
+    unusually good practice for a change with no deprecation window.
+
+error_envelope:
+  platform_api:
+    shape: '{"detail": "<message>"}'
+    format: DRF default, not RFC 9457
+    content_type: application/json
+    note: 'Django REST Framework standard envelope; observed on 401 and 405.'
+  auth_endpoints:
+    shape: '{"valid": <bool>, "message": "<serializer errors>"}'
+    note: >-
+      /api/v1/auth/verify-token/ leaks the raw Python repr of DRF serializer errors into the
+      message string — e.g. "{'non_field_errors': [ErrorDetail(string='Token is required.',
+      code='invalid')]}" — rather than returning structured field errors.
+  search_endpoint:
+    shape: '{"error": "<message>"}'
+  detail: errors/qeenai-error-codes.yml
+
+rate_limit_signaling:
+  headers: []
+  note: >-
+    No RateLimit-*, X-RateLimit-* or Retry-After header was returned on any observed response, and
+    no limits are documented. See rate-limits/qeenai-rate-limits.yml.
+
+request_tracing:
+  header: null
+  note: >-
+    No request-id header is returned by users.qeen.ai. Google Cloud's x-cloud-trace-context is
+    present on api.qeen.ai responses, but that is infrastructure default, not a Qeen contract.
+
+event_conventions:
+  naming:
+    style: 'Title Case with spaces'
+    examples: ['Add To Cart', 'Deep Link Opened', 'Product']
+    reserved: >-
+      QeenEvent.reservedEventNames is a published Set<String> that the custom(eventName:) case may
+      not shadow — a real namespace-collision guard, rare in analytics SDKs.
+  typed_surface: >-
+    Since 1.3.0 the SDK ships typed standard events alongside freeform track(_:properties:).
+    Every monetary amount is a Money (an amount always carries a currency) and every product line
+    is a LineItem, so a currency-less price or a bare product string is not expressible.
+  batching:
+    flush: 'QeenSDK.flush() drains the queue on demand'
+    reset: 'QeenSDK.reset() clears identity and session state'
+  web_session_lifecycle:
+    idle_timeout: 'configurable idleTime; an IDLE event fires and the session resets past the threshold'
+    events: [INIT, PAGE_VIEW, CLICK, SCROLL, IDLE, CHECKOUT, CONTENT_SERVED, TAB_SWITCH, PAGE_EXIT, RESET]
+    transport: navigator.sendBeacon
+    scroll_threshold: 0.5
+    click_debounce_ms: 500
+    guards:
+      - 'CHECKOUT events are rejected on product detail pages (throws InvalidParameterError)'
+      - 'Binding to a selector that matches no element throws InvalidParameterError rather than failing silently'
+      - 'Duplicate click bindings are prevented with a data-qeen-click-bound attribute'
+      - 'A bindQueue defers calls made before the session exists, so ordering does not matter to the caller'
+
+attribution:
+  model: server-side
+  since: 1.2.0
+  detail: >-
+    QeenSDK.handleDeepLink(url) forwards every inbound deep/universal link. The SDK captures any
+    utm_* parameter and any *clid click id (gclid, fbclid, ttclid, ...) plus every other query
+    parameter on the link onto a "Deep Link Opened" event, and attribution is derived server-side.
+    Explicitly designed so new marketing parameters need no SDK release.
+
+debug_and_preview:
+  mobile: 'configure(debug: true) toggles [QeenSDK] console logging'
+  web:
+    - {flag: '#qeen-dev', effect: logs each interaction event to the console}
+    - {flag: '#no-qeen', effect: 'disables the SDK and enables a postMessage preview channel (renderDemoContent, scrollToTarget)'}
+  note: >-
+    These are debug and preview switches, not a sandbox — there is no test environment, no test
+    credentials and no test-vs-live key separation, so no sandbox/ artifact is emitted.
+
+privacy:
+  apple_privacy_manifest: true
+  detail: >-
+    PrivacyInfo.xcprivacy ships at the package root and inside the framework; NSPrivacyTracking=true
+    was added in 1.0.1 (2026-07-28). The SDK accepts email and phone in cleartext on
+    checkoutStarted/signedIn/signedUp — see data-model/ pii_fields.
+
+cross_links:
+  errors: errors/qeenai-error-codes.yml
+  authentication: authentication/qeenai-authentication.yml
+  lifecycle: lifecycle/qeenai-lifecycle.yml
+  rate_limits: rate-limits/qeenai-rate-limits.yml
+  data_model: data-model/qeenai-data-model.yml
+  components: components/qeenai-components.yml

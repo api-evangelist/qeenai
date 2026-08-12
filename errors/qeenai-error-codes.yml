@@ -1,0 +1,123 @@
+generated: '2026-08-12'
+method: derived
+source: >-
+  https://cdn.qeen.ai/sdk/qeen.js (published error classes) and live unauthenticated probes of
+  https://users.qeen.ai/api/v1/* and
+  https://fodoole-web-analytics-qfan6cresq-ew.a.run.app/* on 2026-08-12
+format: proprietary
+rfc9457: false
+note: >-
+  Qeen publishes no error reference page and no OpenAPI, so nothing here is derived from a spec.
+  The SDK error classes are read verbatim from the first-party bundle Qeen serves on its own CDN;
+  the HTTP envelopes were observed on live anonymous requests. Status/body pairs are recorded
+  exactly as returned. This is the non-payments ErrorCatalog shape — Qeen is not a payments
+  provider, so no decline-code artifact applies.
+
+envelopes:
+  - surface: https://users.qeen.ai/api/v1/
+    shape: '{"detail": "<message>"}'
+    content_type: application/json
+    framework: Django REST Framework
+  - surface: https://users.qeen.ai/api/v1/auth/
+    shape: '{"valid": <bool>, "message": "<stringified serializer errors>"}'
+    content_type: application/json
+  - surface: https://fodoole-web-analytics-qfan6cresq-ew.a.run.app/
+    shape: '{"error": "<message>"}'
+    content_type: application/json
+  - surface: unrouted paths on users.qeen.ai
+    shape: HTML
+    content_type: text/html
+    note: 'A plain "Not Found" HTML page is returned for unmatched routes — an API client parsing JSON gets a content-type surprise on a typo.'
+  - surface: https://api.qeen.ai/
+    shape: '404 page not found'
+    content_type: text/plain
+    note: Bare Go http.NotFound on every path including the root.
+
+problems:
+  - status: 401
+    title: Authentication credentials were not provided.
+    envelope_field: detail
+    surface: https://users.qeen.ai/api/v1/core/websites
+    remediation: >-
+      Authenticate as a Qeen customer. The platform API uses cookie-based session auth issued to
+      the app.qeen.ai front end; there is no public key-issuance flow.
+    observed: true
+
+  - status: 405
+    title: 'Method "GET" not allowed.'
+    envelope_field: detail
+    surface: https://users.qeen.ai/api/v1/auth/verify-token/
+    remediation: Use POST. The auth endpoints are POST-only.
+    observed: true
+
+  - status: 400
+    title: Token is required.
+    envelope_field: message
+    surface: https://users.qeen.ai/api/v1/auth/verify-token/
+    remediation: Supply the token in the request body.
+    observed: true
+    defect_note: >-
+      The message field carries a raw Python repr of the DRF serializer error dict
+      ("{'non_field_errors': [ErrorDetail(string='Token is required.', code='invalid')]}") rather
+      than structured field errors. A client cannot parse this reliably, and it discloses the
+      server framework.
+
+  - status: 400
+    title: Empty search query provided
+    envelope_field: error
+    surface: https://fodoole-web-analytics-qfan6cresq-ew.a.run.app/search-results
+    remediation: Provide a non-empty search query.
+    observed: true
+
+  - status: 400
+    title: Unsupported URL
+    envelope_field: null
+    content_type: text/plain
+    surface: https://fodoole-web-analytics-qfan6cresq-ew.a.run.app/sdk/client-config
+    remediation: >-
+      Supply the site/page parameters the loader normally provides. Returned as plain text, not
+      the JSON envelope the sibling endpoint uses on the same host — the data plane is
+      inconsistent about its own error format.
+    observed: true
+
+  - status: 404
+    title: 404 page not found
+    content_type: text/plain
+    surface: https://api.qeen.ai/
+    remediation: 'No route is mounted; api.qeen.ai currently serves no documented API.'
+    observed: true
+
+sdk_error_types:
+  surface: https://cdn.qeen.ai/sdk/qeen.js
+  note: Error classes the published browser SDK throws to the host page.
+  types:
+    - name: InvalidParameterError
+      extends: Error
+      raised_when:
+        - 'a click/scroll binding selector matches no element'
+        - 'an idle threshold is not supplied when resetting the idle timer'
+        - 'sendCheckoutEvent is called without both currency and value'
+        - 'the qeen user device id is missing when an event is constructed'
+    - name: AnalyticsEndpointError
+      extends: Error
+      raised_when: 'analytics is enabled but no analytics endpoint has been configured'
+    - name: ResponseNotOkError
+      extends: Error
+      fields: [status, body, url]
+      message_template: 'Request to ${url} failed with status ${status}: ${body}'
+      raised_when: a content or config request returns a non-2xx response
+    - name: URLContainsNoQeenError
+      extends: Error
+      raised_when: 'the page URL carries the #no-qeen disable flag'
+
+  mobile_note: >-
+    The iOS .swiftinterface declares no error type and no throwing method — every QeenSDK entry
+    point is non-throwing, so mobile failures are silent to the caller by design. debug: true
+    surfaces them as [QeenSDK] console logs only.
+
+summary:
+  problems_observed: 6
+  sdk_error_types: 4
+  documented_error_reference: false
+  rfc9457: false
+  consistent_envelope: false

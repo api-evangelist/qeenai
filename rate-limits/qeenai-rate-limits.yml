@@ -1,0 +1,43 @@
+generated: '2026-08-12'
+method: searched
+source: >-
+  Searched https://github.com/fodoole/qeen-mobile-sdk-ios, https://github.com/fodoole/qeen-maven,
+  https://cdn.qeen.ai/sdk/qeen.js, https://qeen.ai/en, https://apps.shopify.com/qeen-ai and
+  observed live responses from https://users.qeen.ai and
+  https://fodoole-web-analytics-qfan6cresq-ew.a.run.app on 2026-08-12
+limit_count: 0
+note: >-
+  Qeen publishes no rate limits anywhere, and no rate-limit response header was returned on any
+  observed request. This is an honest zero, not an unchecked field. The only throttling behaviour
+  found anywhere in Qeen's published surface is client-side, inside the browser SDK, and it
+  governs event emission rather than API access — it is recorded below because it is the real
+  runtime signal an integrator will encounter, but it is not a server-enforced limit.
+
+limits: []
+
+headers_observed: []
+headers_checked:
+  - RateLimit-Limit
+  - RateLimit-Remaining
+  - RateLimit-Reset
+  - X-RateLimit-Limit
+  - X-RateLimit-Remaining
+  - X-RateLimit-Reset
+  - Retry-After
+exhaustion_status_code: not observed
+
+client_side_throttling:
+  source: https://cdn.qeen.ai/sdk/qeen.js
+  note: Implemented in the published browser SDK, not enforced by the server.
+  controls:
+    - {control: click-event debounce, value: 500ms, detail: 'each bound click handler is wrapped in a 500ms debounce'}
+    - {control: scroll-event de-duplication, detail: 'an element fires SCROLL at most once — the IntersectionObserver unobserves after the first 0.5-threshold intersection'}
+    - {control: single-fire guards, detail: 'pageViewSent and contentServedSent flags ensure PAGE_VIEW and CONTENT_SERVED emit once per session'}
+    - {control: idle reset, detail: 'a configurable idleTime threshold ends the session and resets counters rather than continuing to emit'}
+    - {control: injection mutex, detail: 'window.qeenMutex prevents a second loader instance from double-emitting'}
+
+evidence:
+  - {url: 'https://users.qeen.ai/api/v1/core/websites', status: 401, rate_limit_headers: none}
+  - {url: 'https://users.qeen.ai/api/v1/subscriptions/products', status: 401, rate_limit_headers: none}
+  - {url: 'https://fodoole-web-analytics-qfan6cresq-ew.a.run.app/search-results', status: 400, rate_limit_headers: none}
+  - {url: 'https://api.qeen.ai/', status: 404, rate_limit_headers: none}
