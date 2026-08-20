@@ -43,6 +43,19 @@ created: '2026-07-17'
 modified: '2026-08-12'
 tags:
 - Company
+- Artificial Intelligence
+- Marketing
+- E-Commerce
+- Advertising
+- MENA
+- Analytics
+- Personalization
+- Mobile SDK
+- Content Optimization
+- Search
+- Attribution
+tags_raw:
+- Company
 - Ai
 - Marketing
 - Ecommerce
@@ -74,6 +87,11 @@ apis:
     documents configure(apiKey:host:) and states that the host and API key "are shared privately
     by email — contact tech@qeen.ai". Recording a concrete host here would be a guess.
   tags:
+  - Analytics
+  - Mobile SDK
+  - E-Commerce
+  - Attribution
+  tags_raw:
   - Analytics
   - Mobile SDK
   - Ecommerce
@@ -129,6 +147,9 @@ apis:
   humanURL: https://app.qeen.ai/en
   baseURL: https://users.qeen.ai/api/v1
   tags:
+  - Platform
+  - Subscription
+  tags_raw:
   - Platform
   - Subscriptions
   properties:
