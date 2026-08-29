@@ -44,6 +44,9 @@ description: 'Qeen (qeen.ai) is a Dubai-based AI company serving e-commerce bran
   than through self-service, and the customer platform API at users.qeen.ai is a session-gated
   Django REST Framework backend for the web application rather than a developer API.'
 url: https://raw.githubusercontent.com/api-evangelist/qeenai/refs/heads/main/apis.yml
+x-api-posture: no-product-api
+x-api-posture-basis: observed
+x-api-posture-note: "Qeen publishes no OpenAPI, no developer portal and no public API reference."
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
