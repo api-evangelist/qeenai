@@ -93,3 +93,34 @@ pricing_page:
   note: >-
     qeen.ai has no /pricing page — https://qeen.ai/en/pricing returns 404 and https://qeen.ai/pricing
     serves the homepage. The commission terms appear only in a homepage section.
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - hybrid
+  units: []
+  plans:
+  - name: Starter
+    access: other
+    model: hybrid
+    model_how: derived
+    units: []
+    periods: []
+  - name: Growth
+    access: other
+    model: hybrid
+    model_how: derived
+    units: []
+    periods: []
+  - name: Expansion
+    access: other
+    model: hybrid
+    model_how: derived
+    units: []
+    periods: []
+  - name: Growth System
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
