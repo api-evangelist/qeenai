@@ -1,0 +1,18 @@
+generated: '2026-10-12'
+method: none
+source:
+- https://zapier.com/apps/qeenai/integrations
+- https://zapier.com/apps/qeen-ai/integrations
+- https://n8n.io/integrations/qeenai/
+- https://composio.dev/toolkits/qeenai
+- https://monid.ai/tools/qeenai
+checked:
+- https://composio.dev/toolkits/qeenai
+- https://monid.ai/tools/qeenai
+- https://n8n.io/integrations/qeenai/
+- https://zapier.com/apps/qeen-ai/integrations
+- https://zapier.com/apps/qeenai/integrations
+summary: null
+marketplace_apps: []
+edges: []
+templates: []
