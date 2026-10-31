@@ -64,6 +64,105 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Qeen.AI is a company surfaced as a portfolio company of prosus-ventures and added to the API Evangelist network as a stub for enrichment. Sector: ai. This profile is a lead awaiting the enrichment pipeline.
+Qeen (qeen.ai) is a Dubai-based AI company serving e-commerce brands across the GCC and wider MENA region. Founded in 2023 by former Google and DeepMind researchers and backed by a $10M seed led by Prosus Ventures ($12M total), it sells two things: a self-serve content-optimization product that generates, localizes and A/B-tests Arabic and English product titles, descriptions and meta descriptions, and a commission-based growth marketing engagement priced at 5% of generated revenue with no retainer. Qeen publishes no OpenAPI, no developer portal and no public API reference. Its machine-readable surface is three first-party client SDKs — a binary Swift package for iOS and an Android AAR, both at 1.5.0 and shipping roughly weekly, plus a browser SDK and embedded search widget served from its own CDN. Ingestion credentials (an API key and a customer-provisioned host) are issued privately by email rather than through self-service, and the customer platform API at users.qeen.ai is a session-gated Django REST Framework backend for the web application rather than a developer API.
 
-Backed by: prosus-ventures — https://qeen.ai
+**Areas:** Company · Artificial Intelligence · Marketing · E-Commerce · Advertising · MENA · Analytics · Personalization · Mobile SDK · Content Optimization · Search · Attribution
+
+## Qeen.AI on APIs.io
+
+Everything profiled for Qeen.AI is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/qeenai/](https://apis.io/providers/qeenai/)** — or go straight to one of the APIs or properties below.
+
+### APIs (3)
+
+- [Qeen Mobile Analytics SDK](https://apis.io/apis/qeenai/qeen-mobile-analytics-sdk/) — Qeen's first-party mobile analytics and commerce-event SDK, shipped as a binary XCFramework for iOS (Swift Package Manager) and an AAR for Android…
+- [Qeen Web Content and Analytics API](https://apis.io/apis/qeenai/qeen-web-content-and-analytics-api/) — The browser-side data plane the published qeen.js SDK and loader snippet call. The loader hashes the page URL and a persisted device id and requests a…
+- [Qeen Customer Platform API](https://apis.io/apis/qeenai/qeen-customer-platform-api/) — The backend the Qeen customer web application (app.qeen.ai, a Nuxt single-page app) calls — a path-versioned Django REST Framework service covering…
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Qeenai Authentication](https://apis.io/security/qeenai/qeenai-authentication/)
+- [Qeenai Domain Security](https://apis.io/security/qeenai/qeenai-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Qeenai Plans Pricing](https://apis.io/plans/qeenai/qeenai-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Qeenai Rate Limits](https://apis.io/rate-limits/qeenai/qeenai-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://qeen.ai)
+- [Documentation](https://github.com/fodoole/qeen-mobile-sdk-ios#usage)
+- [Pricing](https://apps.shopify.com/qeen-ai)
+- [Sign up](https://app.qeen.ai/en/auth/signup)
+- [Blog](https://blog.qeen.ai)
+- [Terms of service](https://qeen.ai/en/terms-of-service)
+- [Privacy policy](https://qeen.ai/en/privacy-policy)
+- [GitHub](https://github.com/fodoole)
+
+## API Evangelist rating
+
+**Kin Score 32.3** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 71.4 |
+| Contract quality | 0.0 |
+| Contract governance | 4.5 |
+| Operational transparency | 18.4 |
+| Developer ergonomics | 35.7 |
+| Access clarity | 69.7 |
+
+**Agent readiness 5.8** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 22.7** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/qeenai/](https://apis.io/providers/qeenai/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Qeen.AI: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/qeenai/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
